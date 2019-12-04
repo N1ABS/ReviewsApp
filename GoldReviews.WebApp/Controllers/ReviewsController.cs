@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
 using GoldReviews.Domain;
 using GoldReviews.Service;
 using GoldReviews.WebApp.Models;
@@ -8,8 +9,16 @@ namespace GoldReviews.WebApp.Controllers
 {
     public class ReviewsController : Controller
     {
-        private readonly ReviewContext _reviewContext = new ReviewContext();
-        private readonly ReviewsService _service = new ReviewsService();
+        private readonly ReviewContext _reviewContext;
+        private readonly ReviewsService _service;
+        private readonly MapperConfiguration _configuration;
+
+        public ReviewsController()
+        {
+            _reviewContext = new ReviewContext();
+            _service = new ReviewsService();
+            _configuration = new MapperConfiguration(c => { c.CreateMap<ReviewViewModel, Review>(); });
+        }
 
         // GET: Reviews
         public ActionResult Index()
@@ -18,17 +27,14 @@ namespace GoldReviews.WebApp.Controllers
         }
         
         [HttpPost]
-        public ActionResult Create(ReviewViewModel review)
+        public ActionResult Create(ReviewViewModel reviewViewModel)
         {
-            var model = new Review()
-            {
-                ClientName = review.ClientName,
-                ClientReview = review.ClientReview
-            };
+            var mapper = _configuration.CreateMapper();
+            var review = mapper.Map<Review>(reviewViewModel);
 
             if (ModelState.IsValid)
             {
-                _reviewContext.Reviews.Add(model);
+                _reviewContext.Reviews.Add(review);
                 _reviewContext.SaveChanges();
             }
             return RedirectToAction("Index");
