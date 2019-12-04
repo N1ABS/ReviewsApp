@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Reviews";
+}
+
+
+<a href="@Url.Action("GetAllReviews", "Reviews")" class="btn btn-primary" target="_blank">Get All Reviews (from service)</a>
+<hr />
+@{
+
+    Html.RenderPartial("_Create");
+    <br/>
+    <hr/>
+    <h4>All reviews</h4>
+    <br/>
+    Html.RenderPartial("_Index");
+}

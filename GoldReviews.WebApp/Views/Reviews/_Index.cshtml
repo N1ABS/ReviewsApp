@@ -1,0 +1,22 @@
+﻿@model IEnumerable<GoldReviews.Domain.Review>
+
+
+<ul class="list-group">
+    @{
+        if (!Model.Any())
+        {
+            <li>There are no reviews so far. Be the first to add a r</li>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <li class="list-group-item">
+                    <h4><strong>@Html.DisplayFor(modelItem => item.ClientName)</strong></h4>
+                    <p>@Html.DisplayFor(modelItem => item.ClientReview)</p>
+                </li>
+            }
+        }
+    }
+    
+</ul>
